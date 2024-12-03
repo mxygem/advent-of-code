@@ -72,3 +72,27 @@ func TestDistances(t *testing.T) {
 		})
 	}
 }
+
+func TestSimilarities(t *testing.T) {
+	testCases := []struct {
+		name     string
+		left     []int
+		right    []int
+		expected int
+	}{
+		{
+			name:     "example data",
+			left:     []int{1, 2, 3, 3, 3, 4},
+			right:    []int{3, 3, 3, 4, 5, 9},
+			expected: 31,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			actual := similarities(tc.left, tc.right)
+
+			assert.Equal(t, tc.expected, actual)
+		})
+	}
+}

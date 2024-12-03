@@ -12,30 +12,23 @@ import (
 )
 
 func main() {
-	content, err := os.ReadFile("day_one_input.txt")
+	input, err := os.ReadFile("day_one_input.txt")
 	if err != nil {
 		log.Fatalf("error reading file: %v", err)
 	}
 
-	n := dayOne(string(content))
+	left, right := splitInput(string(input))
 
-	fmt.Printf("distance total: %d\n", n)
-}
-
-func dayOne(input string) int {
-	// split input into two lists
-	left, right := splitInput(input)
-	// fmt.Printf("left: %v\nright: %v\n", left, right)
-
-	// sort the lists
 	slices.Sort(left)
 	slices.Sort(right)
-	// fmt.Printf("left: %v\nright: %v\n", left, right)
 
-	// calculate the distances
+	// part one
 	distance := distances(left, right)
+	fmt.Printf("distance total: %d\n", distance)
 
-	return distance
+	// part two
+	similarity := similarities(left, right)
+	fmt.Printf("similarity total: %d\n", similarity)
 }
 
 func splitInput(input string) ([]int, []int) {
@@ -46,11 +39,8 @@ func splitInput(input string) ([]int, []int) {
 		line := scanner.Text()
 		split := strings.Split(line, "   ")
 
-		leftInt, leftErr := strconv.Atoi(split[0])
-		rightInt, rightErr := strconv.Atoi(split[1])
-		if leftErr != nil || rightErr != nil {
-			continue
-		}
+		leftInt, _ := strconv.Atoi(split[0])
+		rightInt, _ := strconv.Atoi(split[1])
 
 		left = append(left, leftInt)
 		right = append(right, rightInt)
@@ -64,6 +54,28 @@ func distances(left, right []int) int {
 
 	for i, l := range left {
 		n += int(math.Abs(float64(right[i] - l)))
+	}
+
+	return n
+}
+
+func similarities(left, right []int) int {
+	var n int
+	for _, l := range left {
+
+		var c int
+		for _, r := range right {
+			if r < l {
+				continue
+			}
+
+			if l != r {
+				n += l * c
+				break
+			}
+
+			c++
+		}
 	}
 
 	return n

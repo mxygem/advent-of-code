@@ -22,6 +22,10 @@ func main() {
 	// part one
 	safe := safeLevels(levels)
 	fmt.Printf("safe levels: %d\n", safe)
+
+	// part two
+	safe = safeLevelsDampened(levels)
+	fmt.Printf("dampened safe levels: %d\n", safe)
 }
 
 func parseInput(input string) ([][]int, error) {
@@ -81,6 +85,7 @@ func isSafe(levels []int) bool {
 			} else if level > last {
 				dir = 1
 			} else {
+
 				return false
 			}
 		}
@@ -106,4 +111,33 @@ func isSafe(levels []int) bool {
 	}
 
 	return true
+}
+
+func safeLevelsDampened(input [][]int) int {
+	var safe int
+	for _, levels := range input {
+		lc := len(levels)
+		if lc == 0 {
+			continue
+		}
+
+		if isSafe(levels) {
+			safe++
+			continue
+		}
+
+		for i := 0; i < lc; i++ {
+			ls := append([]int{}, levels[:i]...)
+			ls = append(ls, levels[i+1:]...)
+			ok := isSafe(ls)
+			if ok {
+				safe++
+				break
+			}
+
+		}
+
+	}
+
+	return safe
 }

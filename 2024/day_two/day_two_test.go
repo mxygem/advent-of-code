@@ -80,6 +80,7 @@ func TestIsSafe(t *testing.T) {
 	testCases := []struct {
 		name     string
 		levels   []int
+		dampen   bool
 		expected bool
 	}{
 		{
@@ -132,6 +133,65 @@ func TestIsSafe(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			actual := isSafe(tc.levels)
+
+			assert.Equal(t, tc.expected, actual)
+		})
+	}
+}
+
+func TestSafeLevelsDampened(t *testing.T) {
+	testCases := []struct {
+		name     string
+		input    [][]int
+		expected int
+	}{
+		{
+			name:     "safe without removing any level",
+			input:    [][]int{{7, 6, 4, 2, 1}},
+			expected: 1,
+		},
+		{
+			name:     "unsafe regardless of which level is removed",
+			input:    [][]int{{1, 2, 7, 8, 9}},
+			expected: 0,
+		},
+		{
+			name:     "unsafe regardless of which level is removed",
+			input:    [][]int{{9, 7, 6, 2, 1}},
+			expected: 0,
+		},
+		{
+			name:     "safe by removing the second level",
+			input:    [][]int{{1, 3, 2, 4, 5}},
+			expected: 1,
+		},
+		{
+			name:     "safe by removing the third level",
+			input:    [][]int{{8, 6, 4, 4, 1}},
+			expected: 1,
+		},
+		{
+			name:     "safe without removing any level",
+			input:    [][]int{{1, 3, 6, 7, 9}},
+			expected: 1,
+		},
+		{
+			name: "day two example data",
+			input: [][]int{
+				{7, 6, 4, 2, 1},
+				{1, 2, 7, 8, 9},
+				{9, 7, 6, 2, 1},
+				{1, 3, 2, 4, 5},
+				{8, 6, 4, 4, 1},
+				{1, 3, 6, 7, 9},
+			},
+			expected: 4,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			actual := safeLevelsDampened(tc.input)
 
 			assert.Equal(t, tc.expected, actual)
 		})

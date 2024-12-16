@@ -124,6 +124,13 @@ func validUpdate(update []int, rules map[int][]int) (int, bool) {
 	return 0, true
 }
 
+func reorderUpdate(update []int, rules map[int][]int) []int {
+	invalidKey, _ := validUpdate(update, rules)
+	fmt.Printf("invalidKey: %v\n", invalidKey)
+
+	return nil
+}
+
 func inOrder(update []int, key int, rule []int) bool {
 	keyIdx := slices.Index(update, key)
 

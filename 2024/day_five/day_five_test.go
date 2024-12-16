@@ -6,6 +6,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var testRules = map[int][]int{
+	47: {53, 13, 61, 29},
+	97: {13, 61, 47, 29, 53, 75},
+	75: {29, 53, 47, 61, 13},
+	61: {13, 53, 29},
+	29: {13},
+	53: {29, 13},
+}
+
 func TestMiddlePagesSum(t *testing.T) {
 	testCases := []struct {
 		name     string
@@ -183,15 +192,6 @@ func TestFilterRules(t *testing.T) {
 }
 
 func TestValidUpdate(t *testing.T) {
-	rules := map[int][]int{
-		47: {53, 13, 61, 29},
-		97: {13, 61, 47, 29, 53, 75},
-		75: {29, 53, 47, 61, 13},
-		61: {13, 53, 29},
-		29: {13},
-		53: {29, 13},
-	}
-
 	testCases := []struct {
 		name          string
 		update        []int
@@ -235,7 +235,7 @@ func TestValidUpdate(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			actualRule, actualValid := validUpdate(tc.update, rules)
+			actualRule, actualValid := validUpdate(tc.update, testRules)
 
 			assert.Equal(t, tc.expectedRule, actualRule)
 			assert.Equal(t, tc.expectedValid, actualValid)
@@ -300,6 +300,50 @@ func TestMiddlePage(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			assert.Equal(t, tc.expected, middlePage(tc.update))
+		})
+	}
+}
+
+// var testRules = map[int][]int{
+// 	47: {53, 13, 61, 29},
+// 	97: {13, 61, 47, 29, 53, 75},
+// 	75: {29, 53, 47, 61, 13},
+// 	61: {13, 53, 29},
+// 	29: {13},
+// 	53: {29, 13},
+// }
+
+func TestReorderInvalidUpdate(t *testing.T) {
+	testCases := []struct {
+		name     string
+		update   []int
+		expected []int
+	}{
+		{
+			name:     "basic",
+			update:   []int{53, 47},
+			expected: []int{47, 53},
+		},
+		// {
+		// 	name:     "example one",
+		// 	update:   []int{75, 97, 47, 61, 53},
+		// 	expected: []int{97, 75, 47, 61, 53},
+		// },
+		// {
+		// 	name:     "example two",
+		// 	update:   []int{61, 13, 29},
+		// 	expected: []int{61, 29, 13},
+		// },
+		// {
+		// 	name:     "example three",
+		// 	update:   []int{97, 13, 75, 29, 47},
+		// 	expected: []int{97, 75, 47, 29, 13},
+		// },
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			assert.Equal(t, tc.expected, reorderUpdate(tc.update, testRules))
 		})
 	}
 }

@@ -3,19 +3,16 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"math"
-	"os"
 	"slices"
 	"strconv"
 	"strings"
+
+	"github.com/mxygem/advent-of-code/internal"
 )
 
 func main() {
-	input, err := os.ReadFile("day_one_input.txt")
-	if err != nil {
-		log.Fatalf("error reading file: %v", err)
-	}
+	input := internal.Open("day_one_input.txt")
 
 	left, right := splitInput(string(input))
 
